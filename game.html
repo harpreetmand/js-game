@@ -7,6 +7,47 @@
         
     </body>
     <script>
+        var canvas;
+        var canvasContext;
+        var ballX = 50;
+        var ballSpeedX = 5
 
+        window.onload = function(){
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+
+            var fps = 30;
+            setInterval(function(){
+                    drawEverything();
+                    moveEverything();
+            
+            }, 1000/fps);
+        }
+
+
+        function moveEverything(){
+            ballX = ballX + ballSpeedX;
+            if(ballX > canvas.width){
+                ballSpeedX = -ballSpeedX;
+            }
+            if(ballX < 0){
+                ballSpeedX = -ballSpeedX;
+            }
+        }
+        function drawEverything(){
+
+            colorRect(0, 0, canvas.width, canvas.height, 'black');
+            colorRect(0, 100, 10, 100, 'white');
+            colorRect(790, 10, 10, 100, 'red');
+
+            canvasContext.beginPath();
+            canvasContext.arc(ballX, 100, 10, 0, Math.PI*2, true);
+            canvasContext.fill();
+        }
+        function colorRect(leftX, topY, width, height, drawColor){
+            canvasContext.fillStyle = drawColor;
+            canvasContext.fillRect(leftX, topY, width , height);
+
+        }
     </script>
 </html>
