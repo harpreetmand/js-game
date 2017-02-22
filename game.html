@@ -4,7 +4,8 @@
     </head>
     <body>
         <canvas id="gameCanvas" width="800" height="600"></canvas>
-        
+        <div id="timer"></div>
+        <div id="finalScore"></div>
     </body>
     <script>
         var canvas;
@@ -28,7 +29,6 @@
             var root = document.documentElement;
             var mouseX = evt.clientX - rect.left - root.scrollLeft;
             var mouseY = evt.clientY - rect.top - root.scrollTop;
-            console.log(root.ScrollTop);
             return{
                 x:mouseX,
                 y:mouseY
@@ -43,30 +43,33 @@
             setInterval(function(){
                     drawEverything();
                     moveEverything();
+                    countTimer();
             
             }, 1000/fps);
 
             canvas.addEventListener('mousemove',
                 function(evt){
-                    var mousePos = calculateMousePos(evt);
-                    console.log(mousePos.y);
+                    var mousePos = calculateMousePos(evt);                
                     paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
                 }
 
             )
         }
         function ballReset(){
-            ballSpeedX = -ballSpeedX;
-            ballX = canvas.width/2;
-            ballY = canvas.height/2;
+            // ballSpeedX = -ballSpeedX;
+            // ballX = canvas.width/2;
+            // ballY = canvas.height/2;
+            var score = document.getElementById("timer").innerHTML;
+            document.getElementById("timer").innerHTML = "";
+            document.getElementById('finalScore').innerHTML = score;
         }
 
         function computerMovement(){
             var paddle2YCenter = paddle2Y + (PADDLE_HEIGHT/2);
             if(paddle2YCenter< ballY-35){
-                paddle2Y += 6;
+                paddle2Y += 10;
             }else if(paddle2YCenter> ballY+35){
-                paddle2Y -= 6;
+                paddle2Y -= 10;
             }
         }
         function moveEverything(){
@@ -77,9 +80,11 @@
                  if(ballY > paddle2Y && ballY < paddle2Y+PADDLE_HEIGHT){
                     ballSpeedX = -ballSpeedX;
 
-                    var deltaY = ballY-(paddle2Y+PADDLE_HEIGHT/2);
-                    ballSpeedY = deltaY * 0.35;
-                    
+                    //  var deltaY = ballY-(paddle2Y+PADDLE_HEIGHT/2);
+                    // ballSpeedY = deltaY * 0.35;
+                    //   ballSpeedX =  ballSpeedY -2;
+                    console.log(ballSpeedX);
+
                 }else{
                     ballReset();
                     player1Score++;
@@ -89,8 +94,13 @@
                 if(ballY > paddle1Y && ballY < paddle1Y+PADDLE_HEIGHT){
                     ballSpeedX = -ballSpeedX;
 
-                    var deltaY = ballY-(paddle1Y+PADDLE_HEIGHT/2);
-                    ballSpeedY = deltaY * 0.35;
+                    // var deltaY = ballY-(paddle1Y+PADDLE_HEIGHT/2);
+                    // console.log(deltaY);
+                    // ballSpeedY = deltaY * 0.35;
+                    ballSpeedX = ballSpeedX +2;
+                    ballSpeedY = ballSpeedY +2;
+                   
+                    console.log(ballSpeedX);
                     
                 }else{
                     ballReset();
@@ -129,5 +139,23 @@
             canvasContext.fillRect(leftX, topY, width , height);
 
         }
+
+
+
+var timerVar = setInterval(countTimer, 1000);
+var totalSeconds = 0;
+function countTimer() {
+   ++totalSeconds;
+   var hour = Math.floor(totalSeconds /3600);
+   var minute = Math.floor((totalSeconds - hour*3600)/60);
+   var seconds = totalSeconds - (hour*3600 + minute*60);
+
+   document.getElementById("timer").innerHTML = minute+""+seconds;
+}
+
+
+
+
+
     </script>
 </html>
